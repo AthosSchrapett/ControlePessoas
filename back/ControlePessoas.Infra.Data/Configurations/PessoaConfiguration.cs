@@ -20,7 +20,7 @@ internal class PessoaConfiguration : IEntityTypeConfiguration<Pessoa>
         builder.Property(p => p.Nome)
             .HasColumnName("nome")
             .IsRequired()
-            .HasMaxLength(100);
+            .HasMaxLength(60);
 
         builder.Property(p => p.Idade)
             .HasColumnName("idade")
