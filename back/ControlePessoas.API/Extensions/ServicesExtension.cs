@@ -1,4 +1,6 @@
-﻿using ControlePessoas.Domain.Interfaces.Persistence;
+﻿using ControlePessoas.Application.Services;
+using ControlePessoas.Domain.Interfaces.Persistence;
+using ControlePessoas.Domain.Interfaces.Services;
 using ControlePessoas.Infra.Data.Persistence;
 using Microsoft.EntityFrameworkCore;
 
@@ -12,6 +14,8 @@ public static class ServicesExtension
             options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
 
         services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+        services.AddTransient<IPessoaService, PessoaService>();
 
         return services;
     }
