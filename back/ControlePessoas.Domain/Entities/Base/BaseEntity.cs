@@ -14,7 +14,7 @@ public abstract class BaseEntity
         IsDeleted = false;
     }
 
-    public void Atualizar()
+    protected void AtualizarDataEdicao()
     {
         UpdatedAt = DateTime.UtcNow;
     }

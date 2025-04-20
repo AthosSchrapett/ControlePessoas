@@ -31,4 +31,22 @@ public class Pessoa : BaseEntity
     {
         return Idade >= 60;
     }
+
+    public void AtualizarDados
+    (
+        string nome,
+        int idade,
+        char sexo,
+        double peso,
+        double? altura
+    )
+    {
+        Nome = nome;
+        Idade = idade;
+        Sexo = sexo;
+        Peso = peso;
+        Altura = altura;
+        Idoso = VerificarIdoso();
+        base.AtualizarDataEdicao();
+    }
 }
