@@ -18,4 +18,10 @@ public abstract class BaseEntity
     {
         UpdatedAt = DateTime.UtcNow;
     }
+
+    public void MarcarComoExcluida()
+    {
+        IsDeleted = true;
+        AtualizarDataEdicao();
+    }
 }

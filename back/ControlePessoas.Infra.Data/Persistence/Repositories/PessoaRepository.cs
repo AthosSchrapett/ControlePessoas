@@ -21,12 +21,12 @@ public class PessoaRepository : IPessoaRepository
 
     public async Task<IEnumerable<Pessoa>> GetAllAsync()
     {
-        return await _dbSet.ToListAsync();
+        return await _dbSet.Where(x => !x.IsDeleted).ToListAsync();
     }
 
     public Task<Pessoa?> GetByIdAsync(Guid id)
     {
-        return _dbSet.FirstOrDefaultAsync(p => p.Id == id);
+        return _dbSet.FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted);
     }
 
     public void Update(Pessoa pessoa)

@@ -9,4 +9,5 @@ public interface IPessoaService
     Task<IEnumerable<PessoaGetAllDTO>> GetAllAsync();
     Task<PessoaGetDTO> AddAsync(PessoaCreateDTO dto);
     Task<PessoaGetDTO> UpdateAsync(PessoaUpdateDTO dto);
+    Task DeleteAsync(Guid id);
 }

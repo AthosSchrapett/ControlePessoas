@@ -51,6 +51,15 @@ public class PessoaService : IPessoaService
         return pessoa.PessoaParaDTO();
     }
 
+    public async Task DeleteAsync(Guid id)
+    {
+        Pessoa pessoa = await GetPessoaByIdAsync(id);
+        pessoa.MarcarComoExcluida();
+
+        _unitOfWork.PessoaRepository.Update(pessoa);
+        await _unitOfWork.CommitAsync();
+    }
+
     private async Task<Pessoa> GetPessoaByIdAsync(Guid id)
     {
         return await _unitOfWork.PessoaRepository.GetByIdAsync(id) ?? 

@@ -43,4 +43,11 @@ public class PessoaController : ControllerBase
         PessoaGetDTO pessoaAtualizada = await _pessoaService.UpdateAsync(dto);
         return Ok(pessoaAtualizada);
     }
+
+    [HttpDelete("{id:guid}")]
+    public async Task<ActionResult> Delete(Guid id)
+    {
+        await _pessoaService.DeleteAsync(id);
+        return NoContent();
+    }
 }
