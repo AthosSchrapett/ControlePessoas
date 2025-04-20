@@ -19,8 +19,4 @@
     <ProjectReference Include="..\ControlePessoas.Domain\ControlePessoas.Domain.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Configurations\" />
-  </ItemGroup>
-
 </Project>
