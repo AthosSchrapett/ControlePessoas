@@ -1,5 +1,5 @@
 ﻿namespace ControlePessoas.Domain.DTOs.Get;
-public record PessoaGetAll
+public record PessoaGetAllDTO
 (
     Guid Id,
     string Nome,
