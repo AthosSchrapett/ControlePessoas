@@ -1,0 +1,75 @@
+.pessoas-container {
+    padding: 24px;
+    height: 100%;
+    box-sizing: border-box;
+    background-color: #f8f9fa;
+    overflow-x: hidden;
+}
+
+.pessoas-card {
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+
+    mat-card-content {
+        padding: 0 16px 16px;
+
+        .filter-container {
+            margin-top: 24px;
+            margin-bottom: 24px;
+            display: flex;
+            justify-content: center;
+
+            ::ng-deep {
+                .mat-button-toggle-group {
+                    border-radius: 8px;
+                    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+
+                    .mat-button-toggle {
+                        background-color: white;
+                        color: #2c3e50;
+                        min-width: 120px;
+
+                        &.mat-button-toggle-checked {
+                            background-color: #2c3e50;
+                            color: white;
+
+                            .mat-button-toggle-button {
+                                .mat-button-toggle-label-content {
+                                    --mat-standard-button-toggle-selected-state-text-color: #ffffff;
+                                }
+                            }
+                        }
+                    }
+                }
+
+                .mat-button-toggle-standalone.mat-button-toggle-appearance-standard .mat-pseudo-checkbox,
+                .mat-button-toggle-group-appearance-standard .mat-pseudo-checkbox {
+                    --mat-minimal-pseudo-checkbox-selected-checkmark-color: #ffffff;
+                }
+            }
+        }
+    }
+}
+
+.status-badge {
+    padding: 6px 12px;
+    border-radius: 16px;
+    font-size: 12px;
+    font-weight: 500;
+    white-space: nowrap;
+
+    &.idoso {
+        background-color: #49a116;
+        color: #ffffff;
+    }
+
+    &.nao-idoso {
+        background-color: #fc5757;
+        color: #ffffff;
+    }
+}
+
+.idade-idoso {
+    color: #fc5757;
+    font-weight: 500;
+}

@@ -1,0 +1,46 @@
+<div class="pessoas-container">
+  <mat-card class="pessoas-card">
+    
+    <app-page-header
+      title="Lista de Pessoas"
+      subtitle="Gerencie o cadastro de pessoas"
+      buttonLabel="Nova Pessoa"
+      buttonIcon="add"
+      (buttonClick)="onNovaPessoa()">
+    </app-page-header>
+
+    <mat-card-content>
+      <div class="filter-container">
+        <mat-button-toggle-group [(ngModel)]="filtroIdoso" (change)="aplicarFiltro()">
+          <mat-button-toggle value="todos">
+            Todos
+          </mat-button-toggle>
+          <mat-button-toggle value="idosos">
+            Idosos
+          </mat-button-toggle>
+          <mat-button-toggle value="nao-idosos">
+            Não Idosos
+          </mat-button-toggle>
+        </mat-button-toggle-group>
+      </div>
+
+      <app-data-table
+        [columns]="columns"
+        [dataSource]="dataSource.data"
+        [totalItems]="totalItems"
+        [pageSize]="pageSize"
+        (pageChange)="onPageChange($event)"
+        (edit)="onEdit($event)"
+        (delete)="onDelete($event)">
+        <ng-template #idade let-item>
+          <span [class.idade-idoso]="item.idoso">{{item.idade}} anos</span>
+        </ng-template>
+        <ng-template #idoso let-item>
+          <span class="status-badge" [class.idoso]="item.idoso" [class.nao-idoso]="!item.idoso">
+            {{item.idoso ? 'Sim' : 'Não'}}
+          </span>
+        </ng-template>
+      </app-data-table>
+    </mat-card-content>
+  </mat-card>
+</div>
