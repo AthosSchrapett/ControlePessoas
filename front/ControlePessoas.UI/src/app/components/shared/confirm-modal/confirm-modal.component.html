@@ -5,21 +5,21 @@
     </div>
     
     <div class="modal-text">
-      <h2 mat-dialog-title class="text-center">{{data.title}}</h2>
+      <h2 mat-dialog-title>{{ data.title }}</h2>
       <mat-dialog-content>
-        <p class="text-center">{{data.message}}</p>
+        <p>{{ data.message }}</p>
       </mat-dialog-content>
     </div>
   </div>
 
-  <mat-dialog-actions>
-    <button mat-stroked-button class="cancel-button" (click)="onCancel()">
+  <mat-dialog-actions align="end">
+    <button mat-button class="cancel-button" (click)="onCancel()" cdkFocusInitial>
       <mat-icon>close</mat-icon>
-      <span>{{data.cancelText}}</span>
+      {{ data.cancelText }}
     </button>
-    <button mat-flat-button color="warn" class="confirm-button" (click)="onConfirm()">
-      <mat-icon>delete</mat-icon>
-      <span>{{data.confirmText}}</span>
+    <button mat-flat-button [color]="data.confirmColor" class="confirm-button" (click)="onConfirm()">
+      <mat-icon>check</mat-icon>
+      {{ data.confirmText }}
     </button>
   </mat-dialog-actions>
 </div>

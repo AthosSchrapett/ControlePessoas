@@ -1,8 +1,9 @@
-import { Component, Inject } from '@angular/core';
+import { Component, inject, Inject, OnInit, OnDestroy } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { MatDialogModule, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule } from '@angular/material/icon';
+import { Subscription } from 'rxjs';
 
 export interface ConfirmModalData {
   title: string;
@@ -24,11 +25,11 @@ export interface ConfirmModalData {
   templateUrl: './confirm-modal.component.html',
   styleUrls: ['./confirm-modal.component.scss']
 })
-export class ConfirmModalComponent {
-  constructor(
-    public dialogRef: MatDialogRef<ConfirmModalComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: ConfirmModalData
-  ) {
+export class ConfirmModalComponent implements OnInit, OnDestroy {
+  private subscriptions: Subscription[] = [];
+  private dialogRef = inject(MatDialogRef<ConfirmModalComponent>);
+
+  constructor(@Inject(MAT_DIALOG_DATA) public data: ConfirmModalData) {
     this.data = {
       ...data,
       confirmText: data.confirmText || 'Confirmar',
@@ -37,11 +38,33 @@ export class ConfirmModalComponent {
     };
   }
 
+  ngOnInit(): void {
+    this.subscriptions.push(
+      this.dialogRef.keydownEvents().subscribe(event => {
+        if (event.key === 'Escape') {
+          this.onCancel();
+        }
+      }),
+
+      this.dialogRef.backdropClick().subscribe(() => {
+        this.onCancel();
+      })
+    );
+  }
+
+  ngOnDestroy(): void {
+    this.subscriptions.forEach(sub => sub.unsubscribe());
+    
+    if (document.activeElement instanceof HTMLElement) {
+      document.activeElement.blur();
+    }
+  }
+
   onConfirm(): void {
-    this.dialogRef.close(true);
+    this.dialogRef.close({ success: true });
   }
 
   onCancel(): void {
-    this.dialogRef.close(false);
+    this.dialogRef.close({ success: false });
   }
 }
