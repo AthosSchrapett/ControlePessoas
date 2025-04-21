@@ -45,15 +45,15 @@ export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
   private snackBar = inject(MatSnackBar);
 
   constructor(
-    @Inject(MAT_DIALOG_DATA) public data: { pessoa?: PessoaGetDTO },
+    @Inject(MAT_DIALOG_DATA) public data: { pessoa?: PessoaGetDTO }
   ) {
     this.pessoaForm = this.formBuilder.group({
       id: [null],
-      nome: ['', [Validators.required, Validators.minLength(3)]],
-      idade: [null, [Validators.required, Validators.min(1)]],
-      sexo: ['', [Validators.required]],
-      peso: [null, [Validators.required, Validators.min(1)]],
-      altura: [null]
+      nome: ['', [Validators.required, Validators.maxLength(60)]],
+      idade: ['', [Validators.required, Validators.min(1), Validators.max(130)]],
+      sexo: ['', [Validators.required, Validators.pattern(/^[MF]$/)]],
+      peso: ['', [Validators.required, Validators.min(0.1)]],
+      altura: ['', [Validators.required, Validators.min(0.3), Validators.max(2.3)]]
     });
 
     if (data?.pessoa) {
@@ -96,6 +96,39 @@ export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
     }
   }
 
+  getErrorMessage(field: string): string {
+    const control = this.pessoaForm.get(field);
+    if (!control?.errors) return '';
+    const errors = control.errors;
+
+    switch (field) {
+      case 'nome':
+        if (errors['required']) return 'O nome é obrigatório';
+        else if (errors['maxlength']) return 'O nome deve ter no máximo 60 caracteres';
+        break;
+      case 'idade':
+        if (errors['required']) return 'A idade é obrigatória';
+        else if (errors['min']) return 'A idade deve ser maior que zero';
+        else if (errors['max']) return 'A idade deve ser no máximo 130 anos';
+        break;
+      case 'sexo':
+        if (errors['required']) return 'O sexo é obrigatório';
+        else if (errors['pattern']) return "Sexo deve ser 'M' ou 'F'";
+        break;
+      case 'peso':
+        if (errors['required']) return 'O peso é obrigatório';
+        else if (errors['min']) return 'O peso deve ser maior que zero';
+        break;
+      case 'altura':
+        if (errors['required']) return 'A altura é obrigatória';
+        else if (errors['min']) return 'A altura deve ser maior que 0.30 metros';
+        else if (errors['max']) return 'A altura deve ser no máximo 2.30 metros';
+        break;
+    }
+
+    return '';
+  }
+
   onSubmit(): void {
     if (this.pessoaForm.valid) {
       if (this.isEdit && this.pessoaId) {
@@ -104,6 +137,13 @@ export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
       } else {
         this.criarPessoa();
       }
+    } else {
+      Object.keys(this.pessoaForm.controls).forEach(key => {
+        const control = this.pessoaForm.get(key);
+        if (control?.invalid) {
+          control.markAsTouched();
+        }
+      });
     }
   }
 
