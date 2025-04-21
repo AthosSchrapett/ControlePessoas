@@ -16,6 +16,7 @@ import { PessoaService } from '../../services/pessoa.service';
 import { PageHeaderComponent } from '../../components/shared/page-header/page-header.component';
 import { DataTableComponent, DataTableColumn } from '../../components/shared/data-table/data-table.component';
 import { ConfirmModalComponent } from '../../components/shared/confirm-modal/confirm-modal.component';
+import { ModalPessoaComponent } from './modal-pessoa/modal-pessoa.component';
 
 @Component({
   selector: 'app-pessoas',
@@ -102,9 +103,35 @@ export class PessoasComponent implements OnInit {
   }
 
   onNovaPessoa(): void {
+    const dialogRef = this.dialog.open(ModalPessoaComponent, {
+      width: '500px'
+    });
+
+    dialogRef.afterClosed().subscribe(result => {
+      if (result) {
+        this.loadPessoas();
+      }
+    });
   }
 
   onEdit(pessoa: PessoaGetAllDTO): void {
+    this.pessoaService.getById(pessoa.id).subscribe({
+      next: (pessoaDetalhada) => {
+        const dialogRef = this.dialog.open(ModalPessoaComponent, {
+          width: '500px',
+          data: { pessoa: pessoaDetalhada }
+        });
+
+        dialogRef.afterClosed().subscribe(result => {
+          if (result) {
+            this.loadPessoas();
+          }
+        });
+      },
+      error: () => {
+        this.snackBar.open('Erro ao carregar dados da pessoa', 'Fechar', { duration: 3000 });
+      }
+    });
   }
 
   onDelete(pessoa: PessoaGetAllDTO): void {
@@ -121,7 +148,7 @@ export class PessoasComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(result => {
-      if (result) {
+      if (result.success) {
         this.pessoaService.delete(pessoa.id).subscribe({
           next: () => {
             this.snackBar.open('Pessoa excluída com sucesso', 'Fechar', { duration: 3000 });

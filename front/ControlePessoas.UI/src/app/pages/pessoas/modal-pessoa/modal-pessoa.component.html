@@ -1,0 +1,82 @@
+<h2 mat-dialog-title>
+  <div class="title-content">
+    <mat-icon>{{ isEdit ? 'edit' : 'person_add' }}</mat-icon>
+    <span>{{ isEdit ? 'Editar Pessoa' : 'Nova Pessoa' }}</span>
+  </div>
+</h2>
+
+<mat-dialog-content>
+  <form [formGroup]="pessoaForm" (ngSubmit)="onSubmit()">
+    <mat-form-field appearance="outline">
+      <mat-label>Nome</mat-label>
+      <mat-icon matPrefix>person</mat-icon>
+      <input matInput formControlName="nome" placeholder="Digite o nome">
+      @if (pessoaForm.get('nome')?.hasError('required')) {
+        <mat-error>Nome é obrigatório</mat-error>
+      }
+      @if (pessoaForm.get('nome')?.hasError('minlength')) {
+        <mat-error>Nome deve ter pelo menos 3 caracteres</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Idade</mat-label>
+      <mat-icon matPrefix>calendar_today</mat-icon>
+      <input matInput type="number" formControlName="idade" placeholder="Digite a idade">
+      @if (pessoaForm.get('idade')?.hasError('required')) {
+        <mat-error>Idade é obrigatória</mat-error>
+      }
+      @if (pessoaForm.get('idade')?.hasError('min')) {
+        <mat-error>Idade deve ser maior que 0</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Sexo</mat-label>
+      <mat-icon matPrefix>wc</mat-icon>
+      <mat-select formControlName="sexo" placeholder="Selecione o sexo">
+        <mat-option value="M">
+          <mat-icon>male</mat-icon>
+          <span>Masculino</span>
+        </mat-option>
+        <mat-option value="F">
+          <mat-icon>female</mat-icon>
+          <span>Feminino</span>
+        </mat-option>
+      </mat-select>
+      @if (pessoaForm.get('sexo')?.hasError('required')) {
+        <mat-error>Sexo é obrigatório</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Peso (kg)</mat-label>
+      <mat-icon matPrefix>fitness_center</mat-icon>
+      <input matInput type="number" formControlName="peso" placeholder="Digite o peso">
+      @if (pessoaForm.get('peso')?.hasError('required')) {
+        <mat-error>Peso é obrigatório</mat-error>
+      }
+      @if (pessoaForm.get('peso')?.hasError('min')) {
+        <mat-error>Peso deve ser maior que 0</mat-error>
+      }
+    </mat-form-field>
+
+    <mat-form-field appearance="outline">
+      <mat-label>Altura (m)</mat-label>
+      <mat-icon matPrefix>straighten</mat-icon>
+      <input matInput type="number" formControlName="altura" placeholder="Digite a altura">
+    </mat-form-field>
+
+    <mat-dialog-actions align="end">
+      <button type="button" mat-stroked-button class="cancel-button" (click)="onCancel()" cdkFocusInitial>
+        <mat-icon>close</mat-icon>
+        Cancelar
+      </button>
+      <button type="submit" mat-flat-button color="primary" class="confirm-button" [disabled]="!pessoaForm.valid">
+        <mat-icon>{{ isEdit ? 'save' : 'add' }}</mat-icon>
+        {{ isEdit ? 'Atualizar' : 'Salvar' }}
+      </button>
+    </mat-dialog-actions>
+
+  </form>
+</mat-dialog-content>
