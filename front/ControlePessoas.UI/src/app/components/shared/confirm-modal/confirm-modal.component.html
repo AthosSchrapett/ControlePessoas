@@ -1,0 +1,25 @@
+<div class="confirm-modal">
+  <div class="modal-content">
+    <div class="modal-icon">
+      <mat-icon>warning_amber</mat-icon>
+    </div>
+    
+    <div class="modal-text">
+      <h2 mat-dialog-title class="text-center">{{data.title}}</h2>
+      <mat-dialog-content>
+        <p class="text-center">{{data.message}}</p>
+      </mat-dialog-content>
+    </div>
+  </div>
+
+  <mat-dialog-actions>
+    <button mat-stroked-button class="cancel-button" (click)="onCancel()">
+      <mat-icon>close</mat-icon>
+      <span>{{data.cancelText}}</span>
+    </button>
+    <button mat-flat-button color="warn" class="confirm-button" (click)="onConfirm()">
+      <mat-icon>delete</mat-icon>
+      <span>{{data.confirmText}}</span>
+    </button>
+  </mat-dialog-actions>
+</div>

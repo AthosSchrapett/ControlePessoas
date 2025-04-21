@@ -1,0 +1,87 @@
+.table-container {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  
+  &::-webkit-scrollbar {
+    height: 8px;
+  }
+  
+  &::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+  
+  &::-webkit-scrollbar-thumb {
+    background: #888;
+    border-radius: 4px;
+    
+    &:hover {
+      background: #666;
+    }
+  }
+
+  .paginator-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 16px;
+    padding: 0 16px;
+
+    ::ng-deep .mat-mdc-paginator {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      width: fit-content;
+      margin: 0 auto;
+    }
+  }
+}
+
+table {
+  width: 100%;
+  min-width: 600px;
+  border-radius: 8px;
+  overflow: hidden;
+  
+  th {
+    background-color: #f8f9fa;
+    color: #2c3e50;
+    font-weight: 500;
+    font-size: 14px;
+    padding: 16px;
+    white-space: nowrap;
+  }
+
+  td {
+    padding: 12px 16px;
+    font-size: 14px;
+    color: #34495e;
+  }
+
+  .mat-column-actions {
+    width: 120px;
+    
+    .action-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+
+      button {
+        opacity: 0.8;
+        transition: all 0.2s ease;
+
+        &:hover {
+          opacity: 1;
+          transform: translateY(-2px);
+        }
+      }
+    }
+  }
+
+  tr.mat-row {
+    transition: background-color 0.2s ease;
+
+    &:hover {
+      background-color: #f8f9fa;
+    }
+  }
+}

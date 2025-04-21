@@ -1,0 +1,18 @@
+<mat-card-header>
+  <div class="header-content">
+    <div class="header-left">
+      <mat-card-title>{{ title }}</mat-card-title>
+      @if (subtitle) {
+        <mat-card-subtitle>
+          {{ subtitle }}
+        </mat-card-subtitle>
+      }
+    </div>
+    <div class="header-right">
+      <button mat-raised-button color="primary" class="action-button" (click)="onButtonClick()">
+        <mat-icon>{{ buttonIcon }}</mat-icon>
+        {{ buttonLabel }}
+      </button>
+    </div>
+  </div>
+</mat-card-header>
