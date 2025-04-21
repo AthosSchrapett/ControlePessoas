@@ -27,7 +27,7 @@ public class PessoaUpdateDTOValidator : AbstractValidator<PessoaUpdateDTO>
 
         RuleFor(p => p.Peso)
             .GreaterThan(0)
-            .WithMessage("O peso deve ser maior que zero.");
+                .WithMessage("O peso deve ser maior que zero.");
 
         RuleFor(p => p.Altura)
             .LessThanOrEqualTo(2.30)
