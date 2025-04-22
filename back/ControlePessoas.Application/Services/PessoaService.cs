@@ -90,7 +90,7 @@ public class PessoaService : IPessoaService
             FiltroPessoasEnum.TODOS => pessoas,
             FiltroPessoasEnum.IDOSOS => pessoas.Where(p => p.Idoso),
             FiltroPessoasEnum.NAO_IDOSOS => pessoas.Where(p => !p.Idoso),
-            _ => throw new ArgumentOutOfRangeException(nameof(filtro), filtro, null),
+            _ => throw new FiltroInvalidoException(nameof(filtro.FiltroPessoas), filtro.FiltroPessoas),
         };
     }
 

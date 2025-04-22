@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { MatDialog } from '@angular/material/dialog';
@@ -51,11 +51,11 @@ export class PessoasComponent implements OnInit {
   currentPage = 0;
   filtroIdoso: FiltroPessoasEnum = FiltroPessoasEnum.TODOS;
 
-  constructor(
-    private dialog: MatDialog,
-    private pessoaService: PessoaService,
-    private snackBar: MatSnackBar
-  ) {}
+  private dialog: MatDialog = inject(MatDialog);
+  private pessoaService: PessoaService = inject(PessoaService);
+  private snackBar: MatSnackBar = inject(MatSnackBar);
+
+  constructor() {}
 
   ngOnInit(): void {
     this.carregarDados();
@@ -73,8 +73,10 @@ export class PessoasComponent implements OnInit {
         this.dataSource.data = resultado.itens;
         this.totalItems = resultado.totalRegistros;
       },
-      error: () => {
-        this.snackBar.open('Erro ao carregar pessoas', 'Fechar', { duration: 3000 });
+      error: (e) => {
+        this.snackBar.open(e.error.Message, 'Fechar', { duration: 3000 });
+      },
+      complete: () => {
       }
     });
   }

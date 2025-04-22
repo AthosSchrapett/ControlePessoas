@@ -132,18 +132,10 @@ export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
   onSubmit(): void {
     if (this.pessoaForm.valid) {
       if (this.isEdit && this.pessoaId) {
-        console.log('editarPessoa');
         this.editarPessoa();
       } else {
         this.criarPessoa();
       }
-    } else {
-      Object.keys(this.pessoaForm.controls).forEach(key => {
-        const control = this.pessoaForm.get(key);
-        if (control?.invalid) {
-          control.markAsTouched();
-        }
-      });
     }
   }
 
@@ -158,21 +150,26 @@ export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
         this.snackBar.open('Pessoa atualizada com sucesso!', 'Fechar', { duration: 3000 });
         this.dialogRef.close({ success: true, data: pessoaUpdate });
       },
-      error: () => {
-        this.snackBar.open('Erro ao atualizar pessoa', 'Fechar', { duration: 3000 });
+      error: (e) => {
+        this.snackBar.open(e.error.Message, 'Fechar', { duration: 3000 });
+      },
+      complete: () => {
       }
     });
   }
 
   criarPessoa(): void {
     const pessoaCreate: PessoaCreateDTO = this.pessoaForm.value;
+    
     this.pessoaService.create(pessoaCreate).subscribe({
       next: () => {
         this.snackBar.open('Pessoa criada com sucesso!', 'Fechar', { duration: 3000 });
         this.dialogRef.close({ success: true, data: pessoaCreate });
       },
-      error: () => {
-        this.snackBar.open('Erro ao criar pessoa', 'Fechar', { duration: 3000 });
+      error: (e) => {
+        this.snackBar.open(e.error.Message, 'Fechar', { duration: 3000 });
+      },
+      complete: () => {
       }
     });
   }
