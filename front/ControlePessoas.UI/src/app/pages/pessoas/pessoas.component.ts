@@ -1,7 +1,6 @@
-import { Component, inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -10,13 +9,14 @@ import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
 import { MatCardModule } from '@angular/material/card';
-import { PageEvent } from '@angular/material/paginator';
 import { PessoaGetAllDTO } from '../../models/pessoa-get-all.dto';
 import { PessoaService } from '../../services/pessoa.service';
 import { PageHeaderComponent } from '../../components/shared/page-header/page-header.component';
 import { DataTableComponent, DataTableColumn } from '../../components/shared/data-table/data-table.component';
-import { ConfirmModalComponent } from '../../components/shared/confirm-modal/confirm-modal.component';
 import { ModalPessoaComponent } from './modal-pessoa/modal-pessoa.component';
+import { FiltroPessoasEnum } from '../../enums/filtro-pessoas.enum';
+import { FiltroPaginacao } from '../../models/filtro-paginacao.model';
+import { ConfirmModalComponent } from '../../components/shared/confirm-modal/confirm-modal.component';
 
 @Component({
   selector: 'app-pessoas',
@@ -37,6 +37,7 @@ import { ModalPessoaComponent } from './modal-pessoa/modal-pessoa.component';
   styleUrls: ['./pessoas.component.scss']
 })
 export class PessoasComponent implements OnInit {
+  FiltroPessoasEnum = FiltroPessoasEnum;
 
   columns: DataTableColumn[] = [
     { name: 'nome', label: 'Nome', type: 'text' },
@@ -44,62 +45,49 @@ export class PessoasComponent implements OnInit {
     { name: 'idoso', label: 'Idoso', type: 'custom' }
   ];
 
-  pessoas: PessoaGetAllDTO[] = [];
-  dataSource: MatTableDataSource<PessoaGetAllDTO>;
+  dataSource: { data: PessoaGetAllDTO[] } = { data: [] };
   totalItems = 0;
   pageSize = 10;
-  pageIndex = 0;
-  filtroIdoso = 'todos';
+  currentPage = 0;
+  filtroIdoso: FiltroPessoasEnum = FiltroPessoasEnum.TODOS;
 
-  private pessoaService = inject(PessoaService);
-  private dialog = inject(MatDialog);
-  private snackBar = inject(MatSnackBar);
-
-  constructor() {
-    this.dataSource = new MatTableDataSource<PessoaGetAllDTO>([]);
-  }
+  constructor(
+    private dialog: MatDialog,
+    private pessoaService: PessoaService,
+    private snackBar: MatSnackBar
+  ) {}
 
   ngOnInit(): void {
-    this.loadPessoas();
+    this.carregarDados();
   }
 
-  loadPessoas(): void {
-    this.pessoaService.getAll().subscribe({
-      next: (data) => {
-        this.pessoas = data;
-        this.dataSource.data = data;
-        this.totalItems = data.length;
-        this.aplicarFiltro();
+  carregarDados(): void {
+    const filtro: FiltroPaginacao = {
+      pagina: this.currentPage + 1,
+      itensPorPagina: this.pageSize,
+      filtroPessoas: this.filtroIdoso
+    };
+
+    this.pessoaService.getAll(filtro).subscribe({
+      next: (resultado) => {
+        this.dataSource.data = resultado.itens;
+        this.totalItems = resultado.totalRegistros;
       },
-      error: (error) => {
+      error: () => {
         this.snackBar.open('Erro ao carregar pessoas', 'Fechar', { duration: 3000 });
       }
     });
   }
 
-  aplicarFiltro(): void {
-    let dadosFiltrados: PessoaGetAllDTO[] = [];
-
-    switch (this.filtroIdoso) {
-      case 'idosos':
-        dadosFiltrados = this.pessoas.filter(pessoa => pessoa.idoso);
-        break;
-      case 'nao-idosos':
-        dadosFiltrados = this.pessoas.filter(pessoa => !pessoa.idoso);
-        break;
-      default:
-        dadosFiltrados = this.pessoas;
-        break;
-    }
-
-    this.dataSource.data = dadosFiltrados;
-    this.totalItems = dadosFiltrados.length;
+  onPageChange(event: any): void {
+    this.currentPage = event.pageIndex;
+    this.pageSize = event.pageSize;
+    this.carregarDados();
   }
 
-  onPageChange(event: PageEvent): void {
-    this.pageIndex = event.pageIndex;
-    this.pageSize = event.pageSize;
-    this.loadPessoas();
+  aplicarFiltro(): void {
+    this.currentPage = 0;
+    this.carregarDados();
   }
 
   onNovaPessoa(): void {
@@ -109,7 +97,7 @@ export class PessoasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result) {
-        this.loadPessoas();
+        this.carregarDados();
       }
     });
   }
@@ -117,14 +105,14 @@ export class PessoasComponent implements OnInit {
   onEdit(pessoa: PessoaGetAllDTO): void {
     this.pessoaService.getById(pessoa.id).subscribe({
       next: (pessoaDetalhada) => {
-        const dialogRef = this.dialog.open(ModalPessoaComponent, {
-          width: '500px',
+    const dialogRef = this.dialog.open(ModalPessoaComponent, {
+      width: '500px',
           data: { pessoa: pessoaDetalhada }
-        });
+    });
 
-        dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(result => {
           if (result) {
-            this.loadPessoas();
+            this.carregarDados();
           }
         });
       },
@@ -149,16 +137,16 @@ export class PessoasComponent implements OnInit {
 
     dialogRef.afterClosed().subscribe(result => {
       if (result.success) {
-        this.pessoaService.delete(pessoa.id).subscribe({
-          next: () => {
+      this.pessoaService.delete(pessoa.id).subscribe({
+        next: () => {
             this.snackBar.open('Pessoa excluída com sucesso', 'Fechar', { duration: 3000 });
-            this.loadPessoas();
-          },
-          error: () => {
-            this.snackBar.open('Erro ao excluir pessoa', 'Fechar', { duration: 3000 });
-          }
-        });
-      }
+            this.carregarDados();
+        },
+        error: () => {
+          this.snackBar.open('Erro ao excluir pessoa', 'Fechar', { duration: 3000 });
+        }
+      });
+    }
     });
   }
 }

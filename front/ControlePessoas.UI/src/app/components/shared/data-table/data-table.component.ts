@@ -8,7 +8,7 @@ import { MatIconModule } from '@angular/material/icon';
 export interface DataTableColumn {
   name: string;
   label: string;
-  type?: 'text' | 'custom';
+  type: 'text' | 'custom' | 'actions' | undefined;
 }
 
 @Component({

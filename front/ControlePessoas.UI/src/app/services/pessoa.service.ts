@@ -1,11 +1,13 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment.development';
 import { PessoaCreateDTO } from '../models/pessoa-create.dto';
 import { PessoaGetAllDTO } from '../models/pessoa-get-all.dto';
 import { PessoaGetDTO } from '../models/pessoa-get.dto';
 import { PessoaUpdateDTO } from '../models/pessoa-update.dto';
+import { FiltroPaginacao } from '../models/filtro-paginacao.model';
+import { ResultadoPaginacao } from '../models/resultado-paginacao.model';
 
 @Injectable({
   providedIn: 'root'
@@ -13,11 +15,23 @@ import { PessoaUpdateDTO } from '../models/pessoa-update.dto';
 export class PessoaService {
 
   private apiUrl = `${environment.apiUrl}/pessoa`;
+  private headers = new HttpHeaders({
+    'Content-Type': 'application/json',
+    'Accept': 'application/json'
+  });
 
   constructor(private http: HttpClient) { }
 
-  getAll(): Observable<PessoaGetAllDTO[]> {
-    return this.http.get<PessoaGetAllDTO[]>(this.apiUrl);
+  getAll(filtro: FiltroPaginacao): Observable<ResultadoPaginacao<PessoaGetAllDTO>> {
+    const params = new HttpParams()
+      .set('pagina', filtro.pagina.toString())
+      .set('itensPorPagina', filtro.itensPorPagina.toString())
+      .set('filtroPessoas', filtro.filtroPessoas.toString());
+
+    return this.http.get<ResultadoPaginacao<PessoaGetAllDTO>>(`${this.apiUrl}/paginacao`, { 
+      params,
+      headers: this.headers
+    });
   }
 
   getById(id: string): Observable<PessoaGetDTO> {

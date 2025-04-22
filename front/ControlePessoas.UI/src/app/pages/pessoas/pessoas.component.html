@@ -1,24 +1,24 @@
 <div class="pessoas-container">
   <mat-card class="pessoas-card">
-    
     <app-page-header
-      title="Lista de Pessoas"
-      subtitle="Gerencie o cadastro de pessoas"
+      title="Pessoas"
+      subtitle="Gerencie as pessoas cadastradas no sistema"
       buttonLabel="Nova Pessoa"
-      buttonIcon="add"
+      buttonIcon="person_add"
       (buttonClick)="onNovaPessoa()">
     </app-page-header>
 
     <mat-card-content>
+      
       <div class="filter-container">
         <mat-button-toggle-group [(ngModel)]="filtroIdoso" (change)="aplicarFiltro()">
-          <mat-button-toggle value="todos">
+          <mat-button-toggle [value]="FiltroPessoasEnum.TODOS">
             Todos
           </mat-button-toggle>
-          <mat-button-toggle value="idosos">
+          <mat-button-toggle [value]="FiltroPessoasEnum.IDOSOS">
             Idosos
           </mat-button-toggle>
-          <mat-button-toggle value="nao-idosos">
+          <mat-button-toggle [value]="FiltroPessoasEnum.NAO_IDOSOS">
             Não Idosos
           </mat-button-toggle>
         </mat-button-toggle-group>
