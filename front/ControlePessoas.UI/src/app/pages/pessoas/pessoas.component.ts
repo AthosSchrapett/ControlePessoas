@@ -17,6 +17,7 @@ import { ModalPessoaComponent } from './modal-pessoa/modal-pessoa.component';
 import { FiltroPessoasEnum } from '../../enums/filtro-pessoas.enum';
 import { FiltroPaginacao } from '../../models/filtro-paginacao.model';
 import { ConfirmModalComponent } from '../../components/shared/confirm-modal/confirm-modal.component';
+import { handleApiError } from '../../utils/handle-api.error';
 
 @Component({
   selector: 'app-pessoas',
@@ -74,7 +75,7 @@ export class PessoasComponent implements OnInit {
         this.totalItems = resultado.totalRegistros;
       },
       error: (e) => {
-        this.snackBar.open(e.error.Message, 'Fechar', { duration: 3000 });
+        handleApiError(e, this.snackBar);
       },
       complete: () => {
       }

@@ -14,6 +14,7 @@ import { PessoaGetDTO } from '../../../models/pessoa-get.dto';
 import { PessoaService } from '../../../services/pessoa.service';
 import { CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { Subscription } from 'rxjs';
+import { handleApiError } from '../../../utils/handle-api.error';
 
 @Component({
   selector: 'app-modal-pessoa',
@@ -33,7 +34,8 @@ import { Subscription } from 'rxjs';
   templateUrl: './modal-pessoa.component.html',
   styleUrls: ['./modal-pessoa.component.scss']
 })
-export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
+
+export class ModalPessoaComponent implements OnInit, OnDestroy {
   pessoaForm: FormGroup;
   isEdit = false;
   pessoaId: string | null = null;
@@ -77,15 +79,6 @@ export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
         this.onCancel();
       })
     );
-  }
-
-  ngAfterViewInit(): void {
-    setTimeout(() => {
-      const firstInput = document.querySelector('input[formControlName="nome"]');
-      if (firstInput instanceof HTMLElement) {
-        firstInput.focus();
-      }
-    });
   }
 
   ngOnDestroy(): void {
@@ -151,7 +144,7 @@ export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
         this.dialogRef.close({ success: true, data: pessoaUpdate });
       },
       error: (e) => {
-        this.snackBar.open(e.error.Message, 'Fechar', { duration: 3000 });
+        handleApiError(e, this.snackBar);
       },
       complete: () => {
       }
@@ -160,14 +153,14 @@ export class ModalPessoaComponent implements OnInit, OnDestroy, AfterViewInit {
 
   criarPessoa(): void {
     const pessoaCreate: PessoaCreateDTO = this.pessoaForm.value;
-    
+
     this.pessoaService.create(pessoaCreate).subscribe({
       next: () => {
         this.snackBar.open('Pessoa criada com sucesso!', 'Fechar', { duration: 3000 });
         this.dialogRef.close({ success: true, data: pessoaCreate });
       },
       error: (e) => {
-        this.snackBar.open(e.error.Message, 'Fechar', { duration: 3000 });
+        handleApiError(e, this.snackBar);
       },
       complete: () => {
       }
