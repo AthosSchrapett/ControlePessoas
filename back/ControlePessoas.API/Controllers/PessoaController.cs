@@ -2,6 +2,7 @@
 using ControlePessoas.Domain.DTOs.Get;
 using ControlePessoas.Domain.DTOs.Update;
 using ControlePessoas.Domain.Interfaces.Services;
+using ControlePessoas.Domain.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ControlePessoas.API.Controllers;
@@ -20,6 +21,13 @@ public class PessoaController : ControllerBase
     public async Task<ActionResult<IEnumerable<PessoaGetAllDTO>>> GetAll()
     {
         IEnumerable<PessoaGetAllDTO> pessoas = await _pessoaService.GetAllAsync();
+        return Ok(pessoas);
+    }
+
+    [HttpGet("paginacao")]
+    public ActionResult<IEnumerable<PessoaGetAllDTO>> GetAll([FromQuery] FiltroPaginacao filtroPaginacao)
+    {
+        ResultadoPaginacao<PessoaGetAllDTO> pessoas = _pessoaService.GetAllPaginacaoFiltro(filtroPaginacao);
         return Ok(pessoas);
     }
 

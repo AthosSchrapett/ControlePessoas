@@ -33,4 +33,9 @@ public class PessoaRepository : IPessoaRepository
     {
         _dbSet.Update(pessoa);
     }
+
+    public IQueryable<Pessoa> GetAll()
+    {
+        return _dbSet.Where(x => !x.IsDeleted);
+    }
 }
