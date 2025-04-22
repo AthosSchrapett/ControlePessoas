@@ -26,6 +26,7 @@ public class ExceptionMiddleware(RequestDelegate next)
         {
             NaoEncontradoException => StatusCodes.Status404NotFound,
             ArgumentNullException => StatusCodes.Status400BadRequest,
+            FiltroInvalidoException => StatusCodes.Status400BadRequest,
             _ => StatusCodes.Status500InternalServerError,
         };
 
