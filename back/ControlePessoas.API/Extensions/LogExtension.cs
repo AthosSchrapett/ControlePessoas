@@ -15,6 +15,12 @@ public static class LogExtension
         {
             var configuration = context.Configuration;
 
+            var elasticSection = configuration.GetSection("ElasticSearch");
+            var uri = elasticSection["Uri"];
+            var username = elasticSection["Username"];
+            var password = elasticSection["Password"];
+            var environment = elasticSection["Environment"] ?? "dev";
+
             try
             {
                 Log.Logger = new LoggerConfiguration()
@@ -22,9 +28,9 @@ public static class LogExtension
                     .Enrich.WithMachineName()
                     .WriteTo.Console()
                     .WriteTo.File("logs/log.txt", rollingInterval: RollingInterval.Day)
-                    .WriteTo.Elasticsearch([new Uri("https://localhost:9200")], opts =>
+                    .WriteTo.Elasticsearch([new Uri(uri)], opts =>
                     {
-                        opts.DataStream = new DataStreamName("logs", "controlepessoas", "dev");
+                        opts.DataStream = new DataStreamName("logs", "controlepessoas", environment);
                         opts.BootstrapMethod = BootstrapMethod.Failure;
                         opts.ConfigureChannel = channelOpts =>
                         {
@@ -36,7 +42,7 @@ public static class LogExtension
                         };
                     }, transport =>
                     {
-                        transport.Authentication(new BasicAuthentication("elastic", "U24efQYc7904d9zcvh_j"));
+                        transport.Authentication(new BasicAuthentication(username, password));
                         transport.ServerCertificateValidationCallback((sender, certificate, chain, sslPolicyErrors) => true);
                     })
                     .CreateLogger();
