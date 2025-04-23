@@ -2,9 +2,12 @@ using ControlePessoas.API.Controllers;
 using ControlePessoas.Domain.DTOs.Create;
 using ControlePessoas.Domain.DTOs.Get;
 using ControlePessoas.Domain.DTOs.Update;
+using ControlePessoas.Domain.Exceptions;
 using ControlePessoas.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
+using System.Net.Http.Json;
+using System.Net;
 using Xunit;
 
 namespace ControlePessoas.Tests;
@@ -60,6 +63,20 @@ public class PessoaControllerTests
         Assert.Equal('M', returnValue.Sexo);
         Assert.Equal(70.5, returnValue.Peso);
         Assert.Equal(1.75, returnValue.Altura);
+    }
+
+    [Fact]
+    public async Task GetById_WithInvalidId_ReturnsNotFound()
+    {
+        var id = Guid.NewGuid();
+
+        _mockPessoaService.Setup(s => s.GetByIdAsync(It.IsAny<Guid>()))
+            .ThrowsAsync(new NaoEncontradoException());
+
+        await Assert.ThrowsAsync<NaoEncontradoException>
+        (
+            () => _controller.GetById(Guid.NewGuid())
+        );
     }
 
     [Fact]
