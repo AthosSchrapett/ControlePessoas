@@ -15,8 +15,12 @@ Sistema de cadastro, listagem e controle de pessoas com suporte a filtros e pagi
 - Entity Framework Core
 - FluentValidation
 - SQL Server
+- Serilog
+- ElasticSearch
 - Middleware global para tratamento de exceções
+- Middleware global para captura do logs
 - Paginação e filtros no backend com resposta estruturada
+- Testes utilizando o XUnit
 
 ### 🎨 Frontend (Angular)
 - Angular 19
@@ -33,6 +37,7 @@ ControlePessoas/
 ├── Application/            # Serviços, mapeamentos e validators
 ├── Domain/                 # Entidades, interfaces e exceptions
 ├── Infra/                  # Persistência e Unit of Work
+├── Tests/                  # Testes Unitarios
 ```
 
 ---
