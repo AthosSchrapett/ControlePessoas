@@ -7,11 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
+  	<PackageReference Include="Elastic.Serilog.Sinks" Version="8.12.3" />
   	<PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="9.0.3" />
   	<PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="9.0.3">
   		<PrivateAssets>all</PrivateAssets>
   		<IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
   	</PackageReference>
+  	<PackageReference Include="Serilog.AspNetCore" Version="9.0.0" />
+  	<PackageReference Include="Serilog.Enrichers.Environment" Version="3.0.1" />
 	<PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="8.1.1" />
   </ItemGroup>
 

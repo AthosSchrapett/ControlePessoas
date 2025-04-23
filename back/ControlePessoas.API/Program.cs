@@ -1,5 +1,6 @@
 using ControlePessoas.API.Extensions;
 using ControlePessoas.API.Middlewares;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -24,6 +25,10 @@ builder.Services
     .AddInfrastructure(builder.Configuration)
     .AddFluentValidationConfiguration();
 
+builder.Host
+    .AddLogConfiguration()
+    .UseSerilog();
+
 var app = builder.Build();
 
 if (app.Environment.IsDevelopment())
@@ -40,6 +45,7 @@ app.UseCors("AllowFrontend");
 app.UseHttpsRedirection();
 
 app.UseMiddleware<ExceptionMiddleware>();
+app.UseMiddleware<LogMiddleware>();
 
 app.UseAuthorization();
 
