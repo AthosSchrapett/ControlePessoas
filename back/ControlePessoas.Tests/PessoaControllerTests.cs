@@ -6,9 +6,6 @@ using ControlePessoas.Domain.Exceptions;
 using ControlePessoas.Domain.Interfaces.Services;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
-using System.Net.Http.Json;
-using System.Net;
-using Xunit;
 
 namespace ControlePessoas.Tests;
 
